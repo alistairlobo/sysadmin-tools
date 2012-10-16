@@ -1,0 +1,6 @@
+[source]
+name=Red Hat Enterprise Linux $releasever - $basearch - Source
+baseurl=ftp://ftp.redhat.com/pub/redhat/linux/enterprise/$releasever"Server"/en/os/SRPMS/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
