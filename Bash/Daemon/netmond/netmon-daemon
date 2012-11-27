@@ -1,0 +1,19 @@
+#!/bin/bash
+# NetMonD daemon script.
+# v0.1a 26/11/2012 ~ -idk-
+INTERVAL="3";
+i="192.168.1.254"
+echo $$ > /var/run/netmond.pid;
+while :
+do
+	ping -c 1 $i &> /dev/null
+	if [ $? -ne 0 ]; then
+		echo "`date` : ping ke gateway failed, $i kagak kena di ping." > /var/log/netmond.log
+		echo "Network service restarted." >> /var/log/netmond.log
+		/etc/init.d/network restart
+		/bin/mail -s "Server Network Down." "root@localhost.localdomain" < /var/log/netmond.log
+	else
+		echo "Gateway $i bisa di ping." >> /var/log/netmond.log
+	fi
+	sleep $INTERVAL
+done
