@@ -1,0 +1,14 @@
+#!/bin/bash
+# NetworkMonitor auto restart.
+# v0.1a 18/10/2012 ~ -idk- 
+for i in $@; do
+  ping -c 1 $i &> /dev/null
+	if [ $? -ne 0 ]; then
+		echo "`date` : ping ke gateway failed, $i kagak kena di ping." > /root/scripts/netmon.log
+		echo "Network service restarted." >> /root/scripts/netmon.log
+		/etc/init.d/network restart
+		/bin/mail -s "Alastor Network Down." "root@localhost.localdomain" < /root/scripts/netmon.log
+	else
+		echo "Gateway $i bisa di ping." > /root/scripts/upmon.log
+	fi
+done
