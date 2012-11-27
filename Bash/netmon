@@ -7,7 +7,7 @@ for i in $@; do
 		echo "`date` : ping ke gateway failed, $i kagak kena di ping." > /root/scripts/netmon.log
 		echo "Network service restarted." >> /root/scripts/netmon.log
 		/etc/init.d/network restart
-		/bin/mail -s "Alastor Network Down." "root@localhost.localdomain" < /root/scripts/netmon.log
+		/bin/mail -s "Server Network Down." "root@localhost.localdomain" < /root/scripts/netmon.log
 	else
 		echo "Gateway $i bisa di ping." > /root/scripts/upmon.log
 	fi
