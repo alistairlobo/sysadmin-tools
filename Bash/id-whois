@@ -1,0 +1,26 @@
+#!/bin/bash
+# Copyleft (c) -idk- 12/07/2012
+URI="https://www.pandi.or.id/whois/whois.php?domain=$1"
+TMP="/tmp/whoisid-$1"; echo [Querying pandi.or.id]
+GET=`curl -k $URI > $TMP`;
+DNAME="$1";
+DCREATE=`grep "Creation Date:" $TMP | head -1 | cut -d" " -f3`;
+DUPDATE=`grep "Last Updated On:" $TMP | head -1 | cut -d" " -f4`;
+DEXPIRE=`grep "Expiration Date:" $TMP | head -1 | cut -d" " -f3`;
+DINAME=`grep "Internationalized Name:" $TMP | head -1 | cut -d" " -f3,4,5,6,7,8,9`;
+DEMAIL=`grep "Email:" $TMP | head -1 | cut -d" " -f2`;
+DTLP=`grep "Voice Number:" $TMP | head -1 | cut -d" " -f3`;
+
+echo "[+] Whois Results for "$1"."
+echo "[+] Nama domainnya        : "$DNAME
+echo "[+] Tanggal daptarnya     : "$DCREATE
+echo "[+] Tanggal perpanjangnya : "$DUPDATE
+echo "[+] Tanggal abisnya       : "$DEXPIRE
+echo "[+] Nama yg punyanya      : "$DINAME
+echo "[+] Email yg punyanya     : "$DEMAIL
+echo "[+] Mau telpon punyanya   : "$DTLP
+if [ "$DINAME" = "arif wicaksono" ]; then
+echo "[+] Calon istrinya        : Orang Batam"
+fi
+
+shred -uz $TMP
