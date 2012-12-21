@@ -1,0 +1,32 @@
+#!/bin/bash
+# IP to Location v0.1a
+# 21/12/2012 ~ -idk-
+
+TMP='ip2location.raw';
+echo "[Querying ip2location.com]"
+
+#RAW=`curl -k https://www.ip2location.com/$1 > $TMP`; $RAW
+RAW=`GET https://www.ip2location.com/$1 > $TMP`; $RAW
+IP=`grep "IP Address:" $TMP | cut -d "<" -f3 | cut -d ">" -f2`;
+echo "[+] IP Address     : $IP"
+LOC=`grep "images/flags" $TMP | cut -d "<" -f3 | cut -d ">" -f2 | tr -d ' '`;
+echo "[+] Location       : $LOC"
+CON=`grep -A 1 "Connection through" $TMP | tail -1 | cut -d "<" -f2 | cut -d ">" -f2`;
+echo "[+] ISP Connection : $CON"
+LOCT=`grep -A 1 "Local Time" $TMP | tail -1 | cut -d "<" -f2 | cut -d ">" -f2`;
+echo "[+] Local Time     : $LOCT"
+DOM=`grep -A 1 "Domain" $TMP | tail -1 | cut -d "<" -f2 | cut -d ">" -f2`;
+echo "[+] Known Domain   : $DOM"
+SPD=`grep -A 1 "Net Speed" $TMP | tail -1 | cut -d "<" -f2 | cut -d ">" -f2`;
+echo "[+] Speed Level    : $SPD"
+COUNTRY=`grep -A 1 "IDD Code" $TMP | tail -1 | cut -d "<" -f2 | cut -d ">" -f2`;
+echo "[+] Country Code   : $COUNTRY"
+ZIP=`grep -A 1 "ZIP Code" $TMP | tail -1 | cut -d "<" -f2 | cut -d ">" -f2`;
+echo "[+] ZIP Code       : $ZIP"
+MCC=`grep -A 1 "MCC" $TMP | tail -1 | cut -d "<" -f2 | cut -d ">" -f2`;
+echo "[+] MCC Code       : $MCC"
+MNC=`grep -A 1 "MNC" $TMP | tail -1 | cut -d "<" -f2 | cut -d ">" -f2`;
+echo "[+] MNC Code       : $MNC"
+CAR=`grep -A 1 "Carrier" $TMP | tail -1 | cut -d "<" -f2 | cut -d ">" -f2`;
+echo "[+] Carrier Name   : $MNC"
+rm -f $TMP
