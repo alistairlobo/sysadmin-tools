@@ -5,7 +5,7 @@
 TMP='ip2location.raw';
 echo "[Querying ip2location.com]"
 
-RAW=`curl -k https://www.ip2location.com/$1 > $TMP`; $RAW
+#RAW=`curl -k https://www.ip2location.com/$1 > $TMP`; $RAW
 RAW=`GET https://www.ip2location.com/$1 > $TMP`; $RAW
 IP=`grep "IP Address:" $TMP | cut -d "<" -f3 | cut -d ">" -f2`;
 echo "[+] IP Address     : $IP"
@@ -29,4 +29,4 @@ MNC=`grep -A 1 "MNC" $TMP | tail -1 | cut -d "<" -f2 | cut -d ">" -f2`;
 echo "[+] MNC Code       : $MNC"
 CAR=`grep -A 1 "Carrier" $TMP | tail -1 | cut -d "<" -f2 | cut -d ">" -f2`;
 echo "[+] Carrier Name   : $MNC"
-#rm -f $TMP
+rm -f $TMP
