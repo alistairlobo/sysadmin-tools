@@ -1,8 +1,9 @@
 #!/bin/bash
 # Copyleft (c) -idk- 12/07/2012
-URI="https://www.pandi.or.id/whois/whois.php?domain=$1"
+URI="https://www.pandi.or.id/whois/whois.php"
+PDATA="domain=$1&submit=Whois+Lookup"
 TMP="/tmp/whoisid-$1"; echo [Querying pandi.or.id]
-GET=`curl -k $URI > $TMP`;
+GET=`curl -k $URI -d $PDATA > $TMP`;
 DNAME="$1";
 DCREATE=`grep "Creation Date:" $TMP | head -1 | cut -d" " -f3`;
 DUPDATE=`grep "Last Updated On:" $TMP | head -1 | cut -d" " -f4`;
