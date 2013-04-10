@@ -1,0 +1,16 @@
+--- /usr/lib/python2.6/site-packages/nova/virt/libvirt/driver.py	2013-04-10 10:30:31.035293584 +0700
++++ /usr/lib/python2.6/site-packages/nova/virt/libvirt/driver.py-patch	2013-04-10 10:32:02.043186352 +0700
+@@ -2707,6 +2707,13 @@
+                 LOG.debug(_('skipping %(path)s since it looks like volume') %
+                           locals())
+                 continue
++	    # Dex add this on  April 10 2013 - https://review.openstack.org/#/c/24658/2/nova/virt/libvirt/driver.py - BEGIN
++	    if not path:
++                LOG.debug(_('skipping disk for %(instance_name)s as it'
++                            ' does not have a path') %
++                          locals())
++                continue
++	    # Dex add this on  April 10 2013 - https://review.openstack.org/#/c/24658/2/nova/virt/libvirt/driver.py - END
+ 
+             # get the real disk size or
+             # raise a localized error if image is unavailable
