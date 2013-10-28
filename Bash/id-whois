@@ -3,14 +3,14 @@
 URI="https://www.pandi.or.id/whois/whois.php"
 PDATA="domain=$1&submit=Whois+Lookup"
 TMP="/tmp/whoisid-$1"; echo [Querying pandi.or.id]
-GET=`curl -k $URI -d $PDATA > $TMP`;
+GET=`curl -s -k $URI -d $PDATA > $TMP`;
 DNAME="$1";
-DCREATE=`grep "Creation Date:" $TMP | head -1 | cut -d" " -f3`;
-DUPDATE=`grep "Last Updated On:" $TMP | head -1 | cut -d" " -f4`;
-DEXPIRE=`grep "Expiration Date:" $TMP | head -1 | cut -d" " -f3`;
-DINAME=`grep "Internationalized Name:" $TMP | head -1 | cut -d" " -f3,4,5,6,7,8,9`;
-DEMAIL=`grep "Email:" $TMP | head -1 | cut -d" " -f2`;
-DTLP=`grep "Voice Number:" $TMP | head -1 | cut -d" " -f3`;
+DCREATE=`grep "Created On:" $TMP | head -1 | cut -d":" -f2,3`;
+DUPDATE=`grep "Last Updated On:" $TMP | head -1 | cut -d":" -f2,3`;
+DEXPIRE=`grep "Expiration Date:" $TMP | head -1 | cut -d":" -f2,3`;
+DINAME=`grep "Billing Name:" $TMP | head -1 | cut -d":" -f4`;
+DEMAIL=`grep "Billing Email:" $TMP | head -1 | cut -d":" -f2`;
+DTLP=`grep "Billing Phone:" $TMP | head -1 | cut -d":" -f2`;
 
 echo "[+] Whois Results for "$1"."
 echo "[+] Nama domainnya        : "$DNAME
