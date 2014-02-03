@@ -2,10 +2,9 @@
 # Dig NS server AXFR query tools v0.1b
 # v0.1b 01/10/2012 ~ -idk-
 # v0.1a 21/08/2012 ~ -idk- 
-reset
+
 NS=`dig -t NS $1 +short`;
-echo "
-====================================================================================
+echo " =====  $1  =====
 [+] NS server for $1 domain found :
 $NS 
 "
@@ -15,7 +14,6 @@ for ABI in $NS; do
 	HN=`dig @"$UMI" -c CH -t txt hostname.bind +short`;
 	XR=`dig @"$UMI" AXFR $1`;
 echo "
-====================================================================================
 [+] Enumerating $UMI server...
 [+] NS server version       : $VR 
 [+] NS server hostname      : $HN 

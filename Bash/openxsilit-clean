@@ -1,0 +1,66 @@
+#!/bin/bash
+DBUSER="";
+DBPASS="";
+DBNAME="";
+DBHOST="127.0.0.1";
+DATE=`date +%F`;
+
+adminlist () 
+{
+ mysql -u $DBUSER -p$DBPASS -h $DBHOST -D $DBNAME -e "SELECT u.user_id, u.contact_name, u.email_address, u.username FROM ox_users AS u, ox_account_user_assoc AS aua WHERE u.user_id=aua.user_id AND aua.account_id = (SELECT value FROM ox_application_variable WHERE name='admin_account_id');"
+}
+
+zonecheck ()
+{
+ mysql -u $DBUSER -p$DBPASS -h $DBHOST -D $DBNAME -e "SELECT zoneid, append, prepend FROM ox_zones WHERE append != '' OR prepend != '';"
+}
+
+bannercheck ()
+{
+ mysql -u $DBUSER -p$DBPASS -h $DBHOST -D $DBNAME -e "SELECT bannerid, append, prepend FROM ox_banners WHERE append != '' OR prepend != '';"
+}
+
+htmlcheck ()
+{
+mysql -u $DBUSER -p$DBPASS -h $DBHOST -D $DBNAME -e "SELECT bannerid,htmltemplate ,htmlcache from ox_banners  WHERE htmltemplate != null and  htmlcache != null and storagetype IN('web','sql');"
+}
+
+auditdetails ()
+{
+mysql -u $DBUSER -p$DBPASS -h $DBHOST -D $DBNAME -e "UPDATE ox_audit set details= '' where details like '%Check details filed in this table and placed the most occurring text in that field ,mostly frames%';"
+}
+
+echo "[+] Create dbase backup : $DBNAME_$DATE.sql"
+mysqldump -u $DBUSER -p$DBPASS -h $DBHOST --single-transaction --routines --triggers $DBNAME > $DBNAME-$DATE.sql
+echo "[+] $DBNAME-$DATE.sql done."
+
+echo "[+] Listing user with administrator privilege : "
+adminlist
+echo "[*] Please remove unknown admin if found from the list above."
+
+
+echo "[+] Scanning for possible malicious script at zones."
+if [ zonecheck ]; then
+        echo "[*] Ads zone seems clean."
+else
+        echo "[!] Possible malicious zone detected."
+        echo "[*] Suggested action, run this SQL query : UPDATE ox_zones SET append='', prepend='' WHERE append !='' OR prepend != '';"
+fi
+
+echo "[+] Scanning for possible malicious script at banners."
+if [ bannercheck ]; then
+        echo "[*] Ads banners seems clean."
+else
+        echo "[!] Possible malicious banners detected, "
+        echo "[*] Suggested action, run this SQL query : UPDATE ox_banners SET append='', prepend='' WHERE append != '' OR prepend != '';"
+fi
+
+echo "[+] Scanning for possible malicious script at HTML."
+if [ htmlcheck ]; then
+        echo "[-] Ads HTML seems clean."
+else
+        echo "[!] Possible malicious HTML detected, "
+        echo "[*] Suggested action, run this SQL query : UPDATE ox_banners SET htmltemplate='', htmlcache='' WHERE htmltemplate != '' OR htmlcache != '' and storagetype IN('web','sql');"
+fi
+
+auditdetails
